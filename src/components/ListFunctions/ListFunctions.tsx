@@ -33,7 +33,7 @@ export const ListFunctions: React.FC = () => {
     setList((curList) => [...curList, ...values])
     setCommandHistory((history) => [
       ...history,
-      `my_list.append(${values.length === 1 ? values[0] : `[${values}]`})`,
+      `my_list.extend(${values.length === 1 ? values[0] : `[${values}]`})`,
     ])
   }
 
