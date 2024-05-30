@@ -55,17 +55,15 @@ export const ListFunctions: React.FC = () => {
     }
     setList((curList) =>
       [...curList].sort((a, b) => {
-        if (isAscending) {
-          setCommandHistory((history) => [...history, 'my_list.sort()'])
-          return (a as number) - (b as number)
-        }
-        setCommandHistory((history) => [
-          ...history,
-          'my_list.sort(reverse=True)',
-        ])
-        return (b as number) - (a as number)
+        return isAscending
+          ? (a as number) - (b as number)
+          : (b as number) - (a as number)
       })
     )
+    setCommandHistory((history) => [
+      ...history,
+      isAscending ? 'my_list.sort()' : 'my_list.sort(reverse=True)',
+    ])
   }
 
   const toggleSortOrder = () => {
