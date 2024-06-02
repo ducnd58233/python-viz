@@ -6,8 +6,9 @@ interface InputFormProps {
   onInsert: (indexValue: number, inputValue: string) => void
   onRemove: (inputValue: string) => void
   onIndex: (inputValue: string) => void
+  onCount: (inputValue: string) => void
 }
-type Operation = 'append' | 'extend' | 'insert' | 'remove' | 'index'
+type Operation = 'append' | 'extend' | 'insert' | 'remove' | 'index' | 'count'
 
 export const InputForm: React.FC<InputFormProps> = ({
   onAppend,
@@ -15,6 +16,7 @@ export const InputForm: React.FC<InputFormProps> = ({
   onInsert,
   onRemove,
   onIndex,
+  onCount,
 }) => {
   const [inputValue, setInputValue] = useState<string>('')
   const [indexValue, setIndexValue] = useState<string>('')
@@ -33,6 +35,7 @@ export const InputForm: React.FC<InputFormProps> = ({
       }
     },
     remove: () => onRemove(inputValue),
+    count: () => onCount(inputValue),
   }
 
   const handleOperation = () => {
@@ -62,17 +65,14 @@ export const InputForm: React.FC<InputFormProps> = ({
         ) : null}
         <select
           value={operation}
-          onChange={(e) =>
-            setOperation(
-              e.target.value as Operation
-            )
-          }
+          onChange={(e) => setOperation(e.target.value as Operation)}
           className='border p-2 rounded'>
           <option value='append'>Append</option>
           <option value='extend'>Extend</option>
           <option value='insert'>Insert</option>
           <option value='remove'>Remove</option>
           <option value='index'>Index</option>
+          <option value='count'>Count</option>
         </select>
         <button
           onClick={handleOperation}

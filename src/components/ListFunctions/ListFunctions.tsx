@@ -131,6 +131,30 @@ export const ListFunctions: React.FC = () => {
     }, 1000)
   }
 
+  const handleCount = (inputValue: string) => {
+    const values = formatInput(inputValue)
+    if (values.some(isNaN)) {
+      alert('All values should be numbers')
+      return
+    }
+
+    const valueToCount = values.length === 1 ? values[0] : values
+    const count = list.filter(
+      (item) =>
+        (Array.isArray(valueToCount) &&
+          Array.isArray(item) &&
+          JSON.stringify(item) === JSON.stringify(valueToCount)) ||
+        (typeof valueToCount === 'number' && item === valueToCount)
+    ).length
+
+    setCommandHistory((history) => [
+      ...history,
+      `my_list.count(${JSON.stringify(valueToCount)}) // ${count}`,
+    ])
+
+    alert(count)
+  }
+
   const handleRemove = (inputValue: string) => {
     const values = formatInput(inputValue)
     if (values.some(isNaN)) {
@@ -240,6 +264,7 @@ export const ListFunctions: React.FC = () => {
         onInsert={handleInsert}
         onRemove={handleRemove}
         onIndex={handleIndex}
+        onCount={handleCount}
       />
       <ActionButtons
         onPop={handlePop}
