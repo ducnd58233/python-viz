@@ -118,6 +118,10 @@ export const ListFunctions: React.FC = () => {
     const commandValues =
       values.length === 1 ? `${values[0]}` : JSON.stringify(values)
     if (index === -1) {
+      setCommandHistory((history) => [
+        ...history,
+        `// my_list.index(${commandValues}) // ValueError: ${commandValues} not in list`,
+      ])
       alert(`ValueError: ${commandValues} not in list`)
       return
     }
@@ -166,6 +170,10 @@ export const ListFunctions: React.FC = () => {
     const index = findFirstIndex(list, valueToRemove)
     const commandValues = JSON.stringify(valueToRemove)
     if (index === -1) {
+      setCommandHistory((history) => [
+        ...history,
+        `// my_list.remove(${values}) // ValueError: list.remove(${commandValues}): ${commandValues} not in list`,
+      ])
       alert(
         `ValueError: list.remove(${commandValues}): ${commandValues} not in list`
       )
@@ -189,9 +197,17 @@ export const ListFunctions: React.FC = () => {
   }
 
   const handlePop = () => {
+    if (list.length === 0) {
+      setCommandHistory((history) => [
+        ...history,
+        '// my_list.pop() // IndexError: pop from empty list',
+      ])
+      alert('IndexError: pop from empty list')
+      return
+    }
+
     setList((curList) => {
-      const newList = [...curList]
-      newList.slice(0, -1)
+      const newList = curList.slice(0, -1)
       refList.current = newList
       return newList
     })
