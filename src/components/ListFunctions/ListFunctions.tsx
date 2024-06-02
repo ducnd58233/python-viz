@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import ActionButtons from 'components/ActionButtons'
 import CommandHistory from 'components/CommandHistory'
 import InputForm from 'components/InputForm'
@@ -6,63 +6,211 @@ import ListDisplay from 'components/ListDisplay'
 
 export const ListFunctions: React.FC = () => {
   const [list, setList] = useState<(number | number[])[]>([])
+  const refList = useRef(list)
   const [isAscending, setIsAscending] = useState<boolean>(true)
   const [commandHistory, setCommandHistory] = useState<string[]>([
     'my_list = []',
   ])
+  const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null)
+
+  const formatInput = (inputValue: string): number[] => {
+    return inputValue.split(',').map((val) => parseFloat(val.trim()))
+  }
+
+  const findFirstIndex = (
+    list: (number | number[])[],
+    value: number | number[]
+  ): number => {
+    return list.findIndex(
+      (item) =>
+        (Array.isArray(value) &&
+          Array.isArray(item) &&
+          JSON.stringify(item) === JSON.stringify(value)) ||
+        (typeof value === 'number' && item === value)
+    )
+  }
 
   const handleAppend = (inputValue: string) => {
-    const values = inputValue.split(',').map((val) => parseFloat(val.trim()))
+    const values = formatInput(inputValue)
     if (values.some(isNaN)) {
       alert('All values should be number')
       return
     }
-    setList((curList) => [...curList, values.length === 1 ? values[0] : values])
+
+    const commandValues =
+      values.length === 1 ? `${values[0]}` : JSON.stringify(values)
+
+    setList((curList) => {
+      const newList = [...curList, values.length === 1 ? values[0] : values]
+      refList.current = newList
+
+      return newList
+    })
+
     setCommandHistory((history) => [
       ...history,
-      `my_list.append(${values.length === 1 ? values[0] : `[${values}]`})`,
+      `my_list.append(${commandValues}) // ${JSON.stringify(refList.current)}`,
     ])
+
+    setHighlightedIndex(null)
   }
 
   const handleExtend = (inputValue: string) => {
-    const values = inputValue.split(',').map((val) => parseFloat(val.trim()))
+    const values = formatInput(inputValue)
     if (values.some(isNaN)) {
       alert('All values should be number')
       return
     }
-    setList((curList) => [...curList, ...values])
+
+    const commandValues =
+      values.length === 1 ? `${values[0]}` : JSON.stringify(values)
+
+    setList((curList) => {
+      const newList = [...curList, ...values]
+      refList.current = newList
+
+      return newList
+    })
+
     setCommandHistory((history) => [
       ...history,
-      `my_list.extend(${values.length === 1 ? values[0] : `[${values}]`})`,
+      `my_list.extend(${commandValues}) // ${JSON.stringify(refList.current)}`,
     ])
+
+    setHighlightedIndex(null)
+  }
+
+  const handleInsert = (index: number, inputValue: string) => {
+    const values = formatInput(inputValue)
+    if (values.some(isNaN)) {
+      alert('All values should be numbers')
+      return
+    }
+
+    const commandValues =
+      values.length === 1 ? `${values[0]}` : JSON.stringify(values)
+
+    setList((curList) => {
+      const newList = [...curList]
+      newList.splice(index, 0, values.length === 1 ? values[0] : values)
+      refList.current = newList
+
+      return newList
+    })
+
+    setCommandHistory((history) => [
+      ...history,
+      `my_list.insert(${index}, ${commandValues}) // ${JSON.stringify(
+        refList.current
+      )}`,
+    ])
+
+    setHighlightedIndex(null)
+  }
+
+  const handleIndex = (inputValue: string) => {
+    const values = formatInput(inputValue)
+    if (values.some(isNaN)) {
+      alert('All values should be numbers')
+      return
+    }
+    const index = findFirstIndex(list, values.length === 1 ? values[0] : values)
+    const commandValues =
+      values.length === 1 ? `${values[0]}` : JSON.stringify(values)
+    if (index === -1) {
+      alert(`ValueError: ${commandValues} not in list`)
+      return
+    }
+    setHighlightedIndex(index)
+    setTimeout(() => {
+      setCommandHistory((history) => [
+        ...history,
+        `my_list.index(${commandValues}) // ${index}`,
+      ])
+      setHighlightedIndex(null)
+    }, 1000)
+  }
+
+  const handleRemove = (inputValue: string) => {
+    const values = formatInput(inputValue)
+    if (values.some(isNaN)) {
+      alert('All values should be numbers')
+      return
+    }
+
+    const valueToRemove = values.length === 1 ? values[0] : values
+    const index = findFirstIndex(list, valueToRemove)
+    const commandValues = JSON.stringify(valueToRemove)
+    if (index === -1) {
+      alert(
+        `ValueError: list.remove(${commandValues}): ${commandValues} not in list`
+      )
+      return
+    }
+
+    setHighlightedIndex(index)
+    setList((curList) => {
+      const newList = [...curList]
+      newList.splice(index, 1)
+      refList.current = newList
+      return newList
+    })
+    setCommandHistory((history) => [
+      ...history,
+      `my_list.remove(${values}) // ${JSON.stringify(refList.current)}`,
+    ])
+    setTimeout(() => {
+      setHighlightedIndex(null)
+    }, 1000)
   }
 
   const handlePop = () => {
-    setList((curList) => curList.slice(0, -1))
-    setCommandHistory((history) => [...history, 'my_list.pop()'])
+    setList((curList) => {
+      const newList = [...curList]
+      newList.slice(0, -1)
+      refList.current = newList
+      return newList
+    })
+
+    setCommandHistory((history) => [
+      ...history,
+      `my_list.pop() // ${JSON.stringify(refList.current)}`,
+    ])
+  }
+
+  const handleClear = () => {
+    setList(() => [])
+    setCommandHistory((history) => [...history, `my_list.clear() // []`])
   }
 
   const handleSort = () => {
+    const command = isAscending
+      ? 'my_list.sort()'
+      : 'my_list.sort(reverse=True)'
     if (list.some((item) => Array.isArray(item))) {
       setCommandHistory((history) => [
         ...history,
-        "// my_list.sort() // TypeError: '<' not supported between instances of 'list' and 'int'",
+        `// ${command} // TypeError: '<' not supported between instances of 'list' and 'int'`,
       ])
       alert(
         "TypeError: '<' not supported between instances of 'list' and 'int'"
       )
       return
     }
-    setList((curList) =>
-      [...curList].sort((a, b) => {
+    setList((curList) => {
+      const newList = [...curList]
+      newList.sort((a, b) => {
         return isAscending
           ? (a as number) - (b as number)
           : (b as number) - (a as number)
       })
-    )
+      refList.current = newList
+      return newList
+    })
+
     setCommandHistory((history) => [
       ...history,
-      isAscending ? 'my_list.sort()' : 'my_list.sort(reverse=True)',
+      `${command} // ${JSON.stringify(refList.current)}`,
     ])
   }
 
@@ -71,21 +219,37 @@ export const ListFunctions: React.FC = () => {
   }
 
   const handleReverse = () => {
-    setList((curList) => [...curList].reverse())
-    setCommandHistory((history) => [...history, 'my_list.reverse()'])
+    setList((curList) => {
+      const newList = [...curList]
+      newList.reverse()
+      refList.current = newList
+      return newList
+    })
+
+    setCommandHistory((history) => [
+      ...history,
+      `my_list.reverse() // ${JSON.stringify(refList.current)}`,
+    ])
   }
 
   return (
     <div className='bg-white p-6 rounded shadow-md'>
-      <InputForm onAppend={handleAppend} onExtend={handleExtend} />
+      <InputForm
+        onAppend={handleAppend}
+        onExtend={handleExtend}
+        onInsert={handleInsert}
+        onRemove={handleRemove}
+        onIndex={handleIndex}
+      />
       <ActionButtons
         onPop={handlePop}
+        onClear={handleClear}
         onSort={handleSort}
         onToggleSortOrder={toggleSortOrder}
         onReverse={handleReverse}
         isAscending={isAscending}
       />
-      <ListDisplay list={list} />
+      <ListDisplay list={list} highlightedIndex={highlightedIndex} />
       <CommandHistory commandHistory={commandHistory} />
     </div>
   )

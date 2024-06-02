@@ -2,51 +2,82 @@ import { useState } from 'react'
 
 interface InputFormProps {
   onAppend: (inputValue: string) => void
-  onExtend: (extendInputValue: string) => void
+  onExtend: (inputValue: string) => void
+  onInsert: (indexValue: number, inputValue: string) => void
+  onRemove: (inputValue: string) => void
+  onIndex: (inputValue: string) => void
 }
+type Operation = 'append' | 'extend' | 'insert' | 'remove' | 'index'
 
-export const InputForm: React.FC<InputFormProps> = ({ onAppend, onExtend }) => {
+export const InputForm: React.FC<InputFormProps> = ({
+  onAppend,
+  onExtend,
+  onInsert,
+  onRemove,
+  onIndex,
+}) => {
   const [inputValue, setInputValue] = useState<string>('')
-  const [extendInputValue, setExtendInputValue] = useState<string>('')
+  const [indexValue, setIndexValue] = useState<string>('')
+  const [operation, setOperation] = useState<Operation>('append')
 
-  const handleAppend = () => {
-    onAppend(inputValue)
-    setInputValue('')
+  const allowedOperations: Record<string, () => void> = {
+    append: () => onAppend(inputValue),
+    extend: () => onExtend(inputValue),
+    index: () => onIndex(inputValue),
+    insert: () => {
+      const idx = parseInt(indexValue, 10)
+      if (!isNaN(idx)) {
+        onInsert(idx, inputValue)
+      } else {
+        alert("TypeError: 'str' object cannot be interpreted as an integer")
+      }
+    },
+    remove: () => onRemove(inputValue),
   }
 
-  const handleExtend = () => {
-    onExtend(extendInputValue)
-    setExtendInputValue('')
+  const handleOperation = () => {
+    allowedOperations[operation]()
+    setInputValue('')
+    setIndexValue('')
   }
 
   return (
-    <div>
-      <div className='mt-4'>
+    <div className='flex flex-col items-center mt-4'>
+      <div className='flex space-x-2 mt-2'>
         <input
           type='text'
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder='Enter number or comma-separated list'
-          className='border p-2 mr-2 rounded'
+          className='border p-2 w-[512px] rounded'
         />
+        {operation === 'insert' ? (
+          <input
+            type='text'
+            value={indexValue}
+            onChange={(e) => setIndexValue(e.target.value)}
+            placeholder='Enter index'
+            className='border p-2 rounded'
+          />
+        ) : null}
+        <select
+          value={operation}
+          onChange={(e) =>
+            setOperation(
+              e.target.value as Operation
+            )
+          }
+          className='border p-2 rounded'>
+          <option value='append'>Append</option>
+          <option value='extend'>Extend</option>
+          <option value='insert'>Insert</option>
+          <option value='remove'>Remove</option>
+          <option value='index'>Index</option>
+        </select>
         <button
-          onClick={handleAppend}
+          onClick={handleOperation}
           className='bg-blue-500 text-white px-4 py-2 rounded'>
-          Append
-        </button>
-      </div>
-      <div className='mt-4'>
-        <input
-          type='text'
-          value={extendInputValue}
-          onChange={(e) => setExtendInputValue(e.target.value)}
-          placeholder='Enter comma-separated list'
-          className='border p-2 mr-2 rounded'
-        />
-        <button
-          onClick={handleExtend}
-          className='bg-blue-500 text-white px-4 py-2 rounded'>
-          Extend
+          {operation.charAt(0).toUpperCase() + operation.slice(1)}
         </button>
       </div>
     </div>

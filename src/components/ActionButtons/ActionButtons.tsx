@@ -1,5 +1,6 @@
 interface ActionButtonsProps {
   onPop: () => void
+  onClear: () => void
   onSort: () => void
   onToggleSortOrder: () => void
   onReverse: () => void
@@ -8,17 +9,23 @@ interface ActionButtonsProps {
 
 export const ActionButtons: React.FC<ActionButtonsProps> = ({
   onPop,
+  onClear,
   onSort,
   onToggleSortOrder,
   onReverse,
   isAscending,
 }) => {
   return (
-    <div className='mb-4 flex justify-center space-x-4'>
+    <div className='mt-8 flex justify-center space-x-4'>
       <button
         onClick={onPop}
         className='bg-red-500 text-white px-4 py-2 rounded'>
         Pop
+      </button>
+      <button
+        onClick={onClear}
+        className='bg-orange-500 text-white px-4 py-2 rounded'>
+        Clear
       </button>
       <button
         onClick={onSort}
