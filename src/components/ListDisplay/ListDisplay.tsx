@@ -39,7 +39,7 @@ export const ListDisplay: React.FC<ListDisplayProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
               transition={{ duration: 1 }}
-              className={`text-blue-800 font-semibold p-2 m-1 rounded shadow-md border border-black w-24 h-12 text-sm flex flex items-center justify-center ${
+              className={`text-blue-800 font-semibold p-2 m-1 rounded shadow-md border border-black w-24 h-12 text-sm flex items-center justify-center ${
                 index === highlightedIndex ? 'bg-red-500' : 'bg-blue-200'
               }`}>
               {Array.isArray(item) ? `[${item.join(', ')}]` : `${item}`}
