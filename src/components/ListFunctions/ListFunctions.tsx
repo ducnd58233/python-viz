@@ -49,7 +49,7 @@ export const ListFunctions: React.FC = () => {
 
     setCommandHistory((history) => [
       ...history,
-      `my_list.append(${commandValues}) // ${JSON.stringify(refList.current)}`,
+      `my_list.append(${commandValues}) # ${JSON.stringify(refList.current)}`,
     ])
 
     setHighlightedIndex(null)
@@ -74,7 +74,7 @@ export const ListFunctions: React.FC = () => {
 
     setCommandHistory((history) => [
       ...history,
-      `my_list.extend(${commandValues}) // ${JSON.stringify(refList.current)}`,
+      `my_list.extend(${commandValues}) # ${JSON.stringify(refList.current)}`,
     ])
 
     setHighlightedIndex(null)
@@ -100,7 +100,7 @@ export const ListFunctions: React.FC = () => {
 
     setCommandHistory((history) => [
       ...history,
-      `my_list.insert(${index}, ${commandValues}) // ${JSON.stringify(
+      `my_list.insert(${index}, ${commandValues}) # ${JSON.stringify(
         refList.current
       )}`,
     ])
@@ -120,7 +120,7 @@ export const ListFunctions: React.FC = () => {
     if (index === -1) {
       setCommandHistory((history) => [
         ...history,
-        `// my_list.index(${commandValues}) // ValueError: ${commandValues} not in list`,
+        `# my_list.index(${commandValues}) # ValueError: ${commandValues} not in list`,
       ])
       alert(`ValueError: ${commandValues} not in list`)
       return
@@ -129,7 +129,7 @@ export const ListFunctions: React.FC = () => {
     setTimeout(() => {
       setCommandHistory((history) => [
         ...history,
-        `my_list.index(${commandValues}) // ${index}`,
+        `my_list.index(${commandValues}) # ${index}`,
       ])
       setHighlightedIndex(null)
     }, 1000)
@@ -153,7 +153,7 @@ export const ListFunctions: React.FC = () => {
 
     setCommandHistory((history) => [
       ...history,
-      `my_list.count(${JSON.stringify(valueToCount)}) // ${count}`,
+      `my_list.count(${JSON.stringify(valueToCount)}) # ${count}`,
     ])
 
     alert(count)
@@ -172,7 +172,7 @@ export const ListFunctions: React.FC = () => {
     if (index === -1) {
       setCommandHistory((history) => [
         ...history,
-        `// my_list.remove(${values}) // ValueError: list.remove(${commandValues}): ${commandValues} not in list`,
+        `# my_list.remove(${values}) # ValueError: list.remove(${commandValues}): ${commandValues} not in list`,
       ])
       alert(
         `ValueError: list.remove(${commandValues}): ${commandValues} not in list`
@@ -189,7 +189,7 @@ export const ListFunctions: React.FC = () => {
     })
     setCommandHistory((history) => [
       ...history,
-      `my_list.remove(${values}) // ${JSON.stringify(refList.current)}`,
+      `my_list.remove(${values}) # ${JSON.stringify(refList.current)}`,
     ])
     setTimeout(() => {
       setHighlightedIndex(null)
@@ -200,7 +200,7 @@ export const ListFunctions: React.FC = () => {
     if (list.length === 0) {
       setCommandHistory((history) => [
         ...history,
-        '// my_list.pop() // IndexError: pop from empty list',
+        '# my_list.pop() # IndexError: pop from empty list',
       ])
       alert('IndexError: pop from empty list')
       return
@@ -214,13 +214,13 @@ export const ListFunctions: React.FC = () => {
 
     setCommandHistory((history) => [
       ...history,
-      `my_list.pop() // ${JSON.stringify(refList.current)}`,
+      `my_list.pop() # ${JSON.stringify(refList.current)}`,
     ])
   }
 
   const handleClear = () => {
     setList(() => [])
-    setCommandHistory((history) => [...history, `my_list.clear() // []`])
+    setCommandHistory((history) => [...history, `my_list.clear() # []`])
   }
 
   const handleSort = () => {
@@ -230,7 +230,7 @@ export const ListFunctions: React.FC = () => {
     if (list.some((item) => Array.isArray(item))) {
       setCommandHistory((history) => [
         ...history,
-        `// ${command} // TypeError: '<' not supported between instances of 'list' and 'int'`,
+        `# ${command} # TypeError: '<' not supported between instances of 'list' and 'int'`,
       ])
       alert(
         "TypeError: '<' not supported between instances of 'list' and 'int'"
@@ -250,7 +250,7 @@ export const ListFunctions: React.FC = () => {
 
     setCommandHistory((history) => [
       ...history,
-      `${command} // ${JSON.stringify(refList.current)}`,
+      `${command} # ${JSON.stringify(refList.current)}`,
     ])
   }
 
@@ -268,7 +268,7 @@ export const ListFunctions: React.FC = () => {
 
     setCommandHistory((history) => [
       ...history,
-      `my_list.reverse() // ${JSON.stringify(refList.current)}`,
+      `my_list.reverse() # ${JSON.stringify(refList.current)}`,
     ])
   }
 
