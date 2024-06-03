@@ -45,8 +45,22 @@ export const InputForm: React.FC<InputFormProps> = ({
   }
 
   return (
-    <div className='flex flex-col items-center mt-4'>
-      <div className='flex space-x-2 mt-2'>
+    <div className='flex flex-col mt-4'>
+      <div className='flex space-x-2 mt-8 items-center'>
+        <div className='text-2xl text-blue-800 font-bold'>Select action</div>
+        <select
+          value={operation}
+          onChange={(e) => setOperation(e.target.value as Operation)}
+          className='border p-2 rounded'>
+          <option value='append'>Append</option>
+          <option value='extend'>Extend</option>
+          <option value='insert'>Insert</option>
+          <option value='remove'>Remove</option>
+          <option value='index'>Index</option>
+          <option value='count'>Count</option>
+        </select>
+      </div>
+      <div className='flex space-x-2 mt-8'>
         <input
           type='text'
           value={inputValue}
@@ -63,17 +77,7 @@ export const InputForm: React.FC<InputFormProps> = ({
             className='border p-2 rounded'
           />
         ) : null}
-        <select
-          value={operation}
-          onChange={(e) => setOperation(e.target.value as Operation)}
-          className='border p-2 rounded'>
-          <option value='append'>Append</option>
-          <option value='extend'>Extend</option>
-          <option value='insert'>Insert</option>
-          <option value='remove'>Remove</option>
-          <option value='index'>Index</option>
-          <option value='count'>Count</option>
-        </select>
+
         <button
           onClick={handleOperation}
           className='bg-blue-500 text-white px-4 py-2 rounded'>

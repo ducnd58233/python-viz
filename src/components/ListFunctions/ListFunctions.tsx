@@ -132,7 +132,7 @@ export const ListFunctions: React.FC = () => {
         `my_list.index(${commandValues}) # ${index}`,
       ])
       setHighlightedIndex(null)
-    }, 1000)
+    }, 2500)
   }
 
   const handleCount = (inputValue: string) => {
@@ -193,7 +193,7 @@ export const ListFunctions: React.FC = () => {
     ])
     setTimeout(() => {
       setHighlightedIndex(null)
-    }, 1000)
+    }, 2500)
   }
 
   const handlePop = () => {
@@ -274,24 +274,39 @@ export const ListFunctions: React.FC = () => {
 
   return (
     <div className='bg-white p-6 rounded shadow-md'>
-      <InputForm
-        onAppend={handleAppend}
-        onExtend={handleExtend}
-        onInsert={handleInsert}
-        onRemove={handleRemove}
-        onIndex={handleIndex}
-        onCount={handleCount}
-      />
-      <ActionButtons
-        onPop={handlePop}
-        onClear={handleClear}
-        onSort={handleSort}
-        onToggleSortOrder={toggleSortOrder}
-        onReverse={handleReverse}
-        isAscending={isAscending}
-      />
-      <ListDisplay list={list} highlightedIndex={highlightedIndex} />
-      <CommandHistory commandHistory={commandHistory} />
+      <div className='grid grid-cols-2 gap-8 h-86'>
+        <div className='grid grid-rows-2 gap-4'>
+          <div className='border-2 border-black border-dashed px-4 py-4 rounded-md'>
+            <InputForm
+              onAppend={handleAppend}
+              onExtend={handleExtend}
+              onInsert={handleInsert}
+              onRemove={handleRemove}
+              onIndex={handleIndex}
+              onCount={handleCount}
+            />
+          </div>
+
+          <div className='border-2 border-black border-dashed px-4 py-4 rounded-md'>
+            <ActionButtons
+              onPop={handlePop}
+              onClear={handleClear}
+              onSort={handleSort}
+              onToggleSortOrder={toggleSortOrder}
+              onReverse={handleReverse}
+              isAscending={isAscending}
+            />
+          </div>
+        </div>
+
+        <div className='w-full border-2 border-black border-dashed px-4 py-4 rounded-md'>
+          <CommandHistory commandHistory={commandHistory} />
+        </div>
+      </div>
+
+      <div className='w-full overflow-x-auto'>
+        <ListDisplay list={list} highlightedIndex={highlightedIndex} />
+      </div>
     </div>
   )
 }
