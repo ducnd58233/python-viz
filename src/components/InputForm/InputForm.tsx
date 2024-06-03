@@ -66,7 +66,7 @@ export const InputForm: React.FC<InputFormProps> = ({
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder='Enter number or comma-separated list'
-          className='border p-2 w-[512px] rounded'
+          className='border p-2 w-full rounded'
         />
         {operation === 'insert' ? (
           <input
