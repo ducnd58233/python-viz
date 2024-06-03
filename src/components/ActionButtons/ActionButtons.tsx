@@ -31,7 +31,8 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
         </button>
       </div>
 
-      <div className='flex justify-center space-x-4'>
+      <div className='flex space-x-2 mt-8 items-center'>
+        <div className='text-2xl text-blue-800 font-bold'>Other actions: </div>
         <button
           onClick={onPop}
           className='bg-red-500 text-white px-4 py-2 rounded'>
