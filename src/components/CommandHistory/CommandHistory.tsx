@@ -1,9 +1,11 @@
 interface CommandHistoryProps {
   commandHistory: string[]
+  onClearHistory: () => void
 }
 
 export const CommandHistory: React.FC<CommandHistoryProps> = ({
   commandHistory,
+  onClearHistory,
 }) => {
   return (
     <div>
@@ -19,6 +21,11 @@ export const CommandHistory: React.FC<CommandHistoryProps> = ({
           }}
           className=' bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-700'>
           Copy All
+        </button>
+        <button
+          onClick={onClearHistory}
+          className=' bg-red-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-700'>
+          Clear
         </button>
       </div>
 

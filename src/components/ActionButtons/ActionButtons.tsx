@@ -1,33 +1,31 @@
 interface ActionButtonsProps {
   onPop: () => void
   onClear: () => void
-  onSort: () => void
-  onToggleSortOrder: () => void
+  onSortAscending: () => void
+  onSortDescending: () => void
   onReverse: () => void
-  isAscending: boolean
 }
 
 export const ActionButtons: React.FC<ActionButtonsProps> = ({
   onPop,
   onClear,
-  onSort,
-  onToggleSortOrder,
+  onSortAscending,
+  onSortDescending,
   onReverse,
-  isAscending,
 }) => {
   return (
     <div className='flex flex-col mt-4 gap-4'>
       <div className='flex space-x-2 mt-8 items-center'>
         <div className='text-2xl text-blue-800 font-bold'>Sort order: </div>
         <button
-          onClick={onToggleSortOrder}
+          onClick={onSortAscending}
           className='bg-yellow-500 text-white px-4 py-2 rounded'>
-          {isAscending ? 'Ascending' : 'Descending'}
+          Ascending
         </button>
         <button
-          onClick={onSort}
+          onClick={onSortDescending}
           className='bg-green-500 text-white px-4 py-2 rounded'>
-          Sort
+          Descending
         </button>
       </div>
 

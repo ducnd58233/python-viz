@@ -7,7 +7,6 @@ import ListDisplay from 'components/ListDisplay'
 export const ListFunctions: React.FC = () => {
   const [list, setList] = useState<(number | number[])[]>([])
   const refList = useRef(list)
-  const [isAscending, setIsAscending] = useState<boolean>(true)
   const [commandHistory, setCommandHistory] = useState<string[]>([
     'my_list = []',
   ])
@@ -28,6 +27,10 @@ export const ListFunctions: React.FC = () => {
           JSON.stringify(item) === JSON.stringify(value)) ||
         (typeof value === 'number' && item === value)
     )
+  }
+
+  const handleClearCommandHistory = () => {
+    setCommandHistory([])
   }
 
   const handleAppend = (inputValue: string) => {
@@ -223,10 +226,8 @@ export const ListFunctions: React.FC = () => {
     setCommandHistory((history) => [...history, `my_list.clear() # []`])
   }
 
-  const handleSort = () => {
-    const command = isAscending
-      ? 'my_list.sort()'
-      : 'my_list.sort(reverse=True)'
+  const handleSortAscending = () => {
+    const command = 'my_list.sort()'
     if (list.some((item) => Array.isArray(item))) {
       setCommandHistory((history) => [
         ...history,
@@ -240,9 +241,7 @@ export const ListFunctions: React.FC = () => {
     setList((curList) => {
       const newList = [...curList]
       newList.sort((a, b) => {
-        return isAscending
-          ? (a as number) - (b as number)
-          : (b as number) - (a as number)
+        return (a as number) - (b as number)
       })
       refList.current = newList
       return newList
@@ -254,8 +253,31 @@ export const ListFunctions: React.FC = () => {
     ])
   }
 
-  const toggleSortOrder = () => {
-    setIsAscending((val) => !val)
+  const handleSortDescending = () => {
+    const command = 'my_list.sort(reverse=True)'
+    if (list.some((item) => Array.isArray(item))) {
+      setCommandHistory((history) => [
+        ...history,
+        `# ${command} # TypeError: '<' not supported between instances of 'list' and 'int'`,
+      ])
+      alert(
+        "TypeError: '<' not supported between instances of 'list' and 'int'"
+      )
+      return
+    }
+    setList((curList) => {
+      const newList = [...curList]
+      newList.sort((a, b) => {
+        return (b as number) - (a as number)
+      })
+      refList.current = newList
+      return newList
+    })
+
+    setCommandHistory((history) => [
+      ...history,
+      `${command} # ${JSON.stringify(refList.current)}`,
+    ])
   }
 
   const handleReverse = () => {
@@ -291,16 +313,18 @@ export const ListFunctions: React.FC = () => {
             <ActionButtons
               onPop={handlePop}
               onClear={handleClear}
-              onSort={handleSort}
-              onToggleSortOrder={toggleSortOrder}
+              onSortAscending={handleSortAscending}
+              onSortDescending={handleSortDescending}
               onReverse={handleReverse}
-              isAscending={isAscending}
             />
           </div>
         </div>
 
         <div className='w-full border-2 border-black border-dashed px-4 py-4 rounded-md'>
-          <CommandHistory commandHistory={commandHistory} />
+          <CommandHistory
+            commandHistory={commandHistory}
+            onClearHistory={handleClearCommandHistory}
+          />
         </div>
       </div>
 
