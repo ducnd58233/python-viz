@@ -5,10 +5,10 @@ import InputForm from 'components/InputForm'
 import ListDisplay from 'components/ListDisplay'
 
 export const ListFunctions: React.FC = () => {
-  const [list, setList] = useState<(number | number[])[]>([])
+  const [list, setList] = useState<(number | number[])[]>([3,8,5])
   const refList = useRef(list)
   const [commandHistory, setCommandHistory] = useState<string[]>([
-    'my_list = []',
+    'my_list = [3,8,5]',
   ])
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null)
 
