@@ -14,7 +14,7 @@ export const ListDisplay: React.FC<ListDisplayProps> = ({
     <div className='flex flex-col items-center mt-8 w-full h-full'>
       <div className='w-full overflow-x-auto'>
         <div className='min-w-max'>
-          <h4 className='text-xl font-bold mt-2'>Indexes:</h4>
+          <h4 className='text-xl font-bold mt-2'>Index:</h4>
           <div className='mt-4 flex'>
             <AnimatePresence>
               {list.map((_, index) => (
@@ -32,7 +32,7 @@ export const ListDisplay: React.FC<ListDisplayProps> = ({
               ))}
             </AnimatePresence>
           </div>
-          <h4 className='text-xl font-bold mt-2'>Values:</h4>
+          <h4 className='text-xl font-bold mt-2'>Value:</h4>
           <div className='mt-4 flex'>
             <AnimatePresence>
               {list.map((item, index) => (
