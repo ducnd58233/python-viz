@@ -1,14 +1,32 @@
-import ListFunctions from 'components/ListFunctions'
+import ErrorPage from 'pages/ErrorPage'
+import { ListPage } from 'pages/ListPage/ListPage'
+import { RootPage } from 'pages/RootPage/RootPage'
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 function App() {
-  return (
-    <div className='min-h-screen bg-gray-100 p-4'>
-      <h1 className='text-3xl font-bold text-center mb-6'>
-        Python List Functions Visualizer
-      </h1>
-      <ListFunctions />
-    </div>
+  const router = createBrowserRouter(
+    [
+      {
+        path: '/',
+        element: <RootPage />,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: '/',
+            element: <Navigate to='/list' replace />,
+          },
+          {
+            path: '/list',
+            element: <ListPage />,
+          },
+        ],
+      },
+    ],
+    {
+      basename: '/python-viz',
+    }
   )
+  return <RouterProvider router={router} />
 }
 
 export default App

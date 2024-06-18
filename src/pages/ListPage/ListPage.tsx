@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react'
 import ActionButtons from 'components/ActionButtons'
 import CommandHistory from 'components/CommandHistory'
 import InputForm from 'components/InputForm'
 import ListDisplay from 'components/ListDisplay'
+import { useRef, useState } from 'react'
 
-export const ListFunctions: React.FC = () => {
-  const [list, setList] = useState<(number | number[])[]>([3,8,5])
+export const ListPage: React.FC = () => {
+  const [list, setList] = useState<(number | number[])[]>([3, 8, 5])
   const refList = useRef(list)
   const [commandHistory, setCommandHistory] = useState<string[]>([
     'my_list = [3,8,5]',
@@ -296,6 +296,10 @@ export const ListFunctions: React.FC = () => {
 
   return (
     <div className='bg-white p-6 rounded shadow-md'>
+      <h1 className='text-3xl font-bold text-center mb-6'>
+        Python List Functions Visualizer
+      </h1>
+
       <div className='grid grid-cols-2 gap-8 h-86'>
         <div className='grid grid-rows-2 gap-4'>
           <div className='border-2 border-black border-dashed px-4 py-4 rounded-md'>
