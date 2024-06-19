@@ -2,10 +2,10 @@ import ErrorPage from 'pages/ErrorPage'
 import { ListPage } from 'pages/ListPage/ListPage'
 import { QueuePage } from 'pages/QueuePage/QueuePage'
 import { RootPage } from 'pages/RootPage/RootPage'
-import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Navigate, RouterProvider, createHashRouter } from 'react-router-dom'
 
 function App() {
-  const router = createBrowserRouter(
+  const router = createHashRouter(
     [
       {
         path: '/',
@@ -26,10 +26,7 @@ function App() {
           },
         ],
       },
-    ],
-    {
-      basename: '/python-viz',
-    }
+    ]
   )
   return <RouterProvider router={router} />
 }
