@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 interface ListDisplayProps {
   list: (number | number[])[]
-  highlightedIndex: number | null
+  highlightedIndex?: number | null
 }
 
 export const ListDisplay: React.FC<ListDisplayProps> = ({

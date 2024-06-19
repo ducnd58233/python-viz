@@ -1,45 +1,30 @@
 import { useState } from 'react'
 
 interface InputFormProps {
-  onAppend: (inputValue: string) => void
-  onExtend: (inputValue: string) => void
-  onInsert: (indexValue: number, inputValue: string) => void
-  onRemove: (inputValue: string) => void
-  onIndex: (inputValue: string) => void
-  onCount: (inputValue: string) => void
+  operations: {
+    [key: string]: (indexValue?: number, inputValue?: string) => void
+  }
+  labels: {
+    [key: string]: {
+      text: string
+      bgColor: string
+      textColor: string
+    }
+  }
 }
-type Operation = 'append' | 'extend' | 'insert' | 'remove' | 'index' | 'count'
 
-export const InputForm: React.FC<InputFormProps> = ({
-  onAppend,
-  onExtend,
-  onInsert,
-  onRemove,
-  onIndex,
-  onCount,
-}) => {
+export const InputForm: React.FC<InputFormProps> = ({ operations, labels }) => {
   const [inputValue, setInputValue] = useState<string>('')
   const [indexValue, setIndexValue] = useState<string>('')
-  const [operation, setOperation] = useState<Operation>('append')
-
-  const allowedOperations: Record<string, () => void> = {
-    append: () => onAppend(inputValue),
-    extend: () => onExtend(inputValue),
-    index: () => onIndex(inputValue),
-    insert: () => {
-      const idx = parseInt(indexValue, 10)
-      if (!isNaN(idx)) {
-        onInsert(idx, inputValue)
-      } else {
-        alert("TypeError: 'str' object cannot be interpreted as an integer")
-      }
-    },
-    remove: () => onRemove(inputValue),
-    count: () => onCount(inputValue),
-  }
+  const [operation, setOperation] = useState<string>(Object.keys(operations)[0])
 
   const handleOperation = () => {
-    allowedOperations[operation]()
+    const idx = parseInt(indexValue, 10)
+    if (operation === 'insert' && isNaN(idx)) {
+      alert("TypeError: 'str' object cannot be interpreted as an integer")
+      return
+    }
+    operations[operation](isNaN(idx) ? undefined : idx, inputValue)
     setInputValue('')
     setIndexValue('')
   }
@@ -50,14 +35,13 @@ export const InputForm: React.FC<InputFormProps> = ({
         <div className='text-2xl text-blue-800 font-bold'>Select action</div>
         <select
           value={operation}
-          onChange={(e) => setOperation(e.target.value as Operation)}
+          onChange={(e) => setOperation(e.target.value)}
           className='border p-2 rounded'>
-          <option value='append'>Append</option>
-          <option value='extend'>Extend</option>
-          <option value='insert'>Insert</option>
-          <option value='remove'>Remove</option>
-          <option value='index'>Index</option>
-          <option value='count'>Count</option>
+          {Object.keys(operations).map((op) => (
+            <option key={op} value={op}>
+              {labels[op].text}
+            </option>
+          ))}
         </select>
       </div>
       <div className='flex space-x-2 mt-8'>
@@ -65,10 +49,10 @@ export const InputForm: React.FC<InputFormProps> = ({
           type='text'
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          placeholder='Enter number or comma-separated list'
+          placeholder='Enter value or comma-separated list'
           className='border p-2 w-full rounded'
         />
-        {operation === 'insert' ? (
+        {operation === 'insert' && (
           <input
             type='text'
             value={indexValue}
@@ -76,12 +60,11 @@ export const InputForm: React.FC<InputFormProps> = ({
             placeholder='Enter index'
             className='border p-2 rounded'
           />
-        ) : null}
-
+        )}
         <button
           onClick={handleOperation}
-          className='bg-blue-500 text-white px-4 py-2 rounded'>
-          {operation.charAt(0).toUpperCase() + operation.slice(1)}
+          className={`px-4 py-2 rounded ${labels[operation].bgColor} ${labels[operation].textColor}`}>
+          {labels[operation].text}
         </button>
       </div>
     </div>

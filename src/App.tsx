@@ -1,5 +1,6 @@
 import ErrorPage from 'pages/ErrorPage'
 import { ListPage } from 'pages/ListPage/ListPage'
+import { QueuePage } from 'pages/QueuePage/QueuePage'
 import { RootPage } from 'pages/RootPage/RootPage'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
@@ -18,6 +19,10 @@ function App() {
           {
             path: '/list',
             element: <ListPage />,
+          },
+          {
+            path: '/queue',
+            element: <QueuePage />,
           },
         ],
       },

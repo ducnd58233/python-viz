@@ -1,4 +1,4 @@
-import { ListBulletIcon } from '@heroicons/react/16/solid'
+import { ListBulletIcon, QueueListIcon } from '@heroicons/react/16/solid'
 import SideBar from 'components/SideBar'
 import { Outlet } from 'react-router-dom'
 
@@ -8,6 +8,11 @@ export const RootPage: React.FC = () => {
       path: '/list',
       label: 'List',
       icon: <ListBulletIcon className='h-6 w-6' />,
+    },
+    {
+      path: '/queue',
+      label: 'Queue',
+      icon: <QueueListIcon className='h-6 w-6' />,
     },
   ]
 
