@@ -5,7 +5,7 @@ import InputForm from 'components/InputForm'
 import ListDisplay from 'components/ListDisplay'
 
 export const QueuePage: React.FC = () => {
-  const [queue, setQueue] = useState<number[]>([])
+  const [queue, setQueue] = useState<(number | number[])[]>([])
   const refQueue = useRef(queue)
   const [commandHistory, setCommandHistory] = useState<string[]>([
     'from collections import deque\n\n',
@@ -38,7 +38,7 @@ export const QueuePage: React.FC = () => {
       values.length === 1 ? `${values[0]}` : JSON.stringify(values)
 
     setQueue((curQueue) => {
-      const newQueue = [...curQueue, ...values]
+      const newQueue = [...curQueue, values.length === 1 ? values[0] : values]
       refQueue.current = newQueue
 
       return newQueue
@@ -77,7 +77,8 @@ export const QueuePage: React.FC = () => {
   const handleIsEmpty = () => {
     setCommandHistory((history) => [
       ...history,
-      `print(len(queue)) # ${queue.length}`,
+      `is_empty = len(queue) == 0`,
+      `print(is_empty) # ${queue.length === 0 ? 'True': 'False'}`,
     ])
   }
 
