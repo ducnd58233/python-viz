@@ -225,7 +225,10 @@ export const ListPage: React.FC = () => {
   }
 
   const handleClear = () => {
-    setList(() => [])
+    setList(() => {
+      refList.current = []
+      return []
+    })
     setCommandHistory((history) => [...history, `my_list.clear() # []`])
   }
 

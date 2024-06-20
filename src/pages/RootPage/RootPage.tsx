@@ -19,7 +19,7 @@ export const RootPage: React.FC = () => {
   return (
     <div className='flex h-screen'>
       <SideBar items={sidebarItems} />
-      <div className='flex-grow p-6 bg-gray-100'>
+      <div className='flex-grow p-6 bg-gray-100 overflow-y-auto'>
         <Outlet />
       </div>
     </div>

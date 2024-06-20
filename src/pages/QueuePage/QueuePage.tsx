@@ -78,7 +78,7 @@ export const QueuePage: React.FC = () => {
     setCommandHistory((history) => [
       ...history,
       `is_empty = len(queue) == 0`,
-      `print(is_empty) # ${queue.length === 0 ? 'True': 'False'}`,
+      `print(is_empty) # ${queue.length === 0 ? 'True' : 'False'}`,
     ])
   }
 
@@ -92,6 +92,17 @@ export const QueuePage: React.FC = () => {
       return
     }
     setCommandHistory((history) => [...history, `print(queue[0]) # ${front}`])
+  }
+
+  const handleClear = () => {
+    setQueue(() => {
+      refQueue.current = []
+      return []
+    })
+    setCommandHistory((history) => [
+      ...history,
+      `queue.clear() # ${formatOutput()}`,
+    ])
   }
 
   const inputLabels = {
@@ -114,6 +125,11 @@ export const QueuePage: React.FC = () => {
       textColor: 'text-white',
     },
     peek: { text: 'Peek', bgColor: 'bg-purple-500', textColor: 'text-white' },
+    onClear: {
+      text: 'Clear',
+      bgColor: 'bg-orange-500',
+      textColor: 'text-white',
+    },
   }
 
   return (
@@ -137,6 +153,7 @@ export const QueuePage: React.FC = () => {
                 dequeue: handleDequeue,
                 isempty: handleIsEmpty,
                 peek: handlePeek,
+                onClear: handleClear,
               }}
               labels={buttonLabels}
             />
