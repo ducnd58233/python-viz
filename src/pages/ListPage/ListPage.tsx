@@ -1,19 +1,21 @@
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import ActionButtons from 'components/ActionButtons'
 import CommandHistory from 'components/CommandHistory'
 import InputForm from 'components/InputForm'
 import ListDisplay from 'components/ListDisplay'
 
-export const ListFunctions: React.FC = () => {
-  const [list, setList] = useState<(number | number[])[]>([3,8,5])
+export const ListPage: React.FC = () => {
+  const [list, setList] = useState<(number | number[])[]>([3, 8, 5])
   const refList = useRef(list)
   const [commandHistory, setCommandHistory] = useState<string[]>([
     'my_list = [3,8,5]',
   ])
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null)
 
-  const formatInput = (inputValue: string): number[] => {
-    return inputValue.split(',').map((val) => parseFloat(val.trim()))
+  const formatInput = (inputValue?: string): number[] => {
+    return inputValue
+      ? inputValue.split(',').map((val) => parseFloat(val.trim()))
+      : []
   }
 
   const findFirstIndex = (
@@ -33,7 +35,7 @@ export const ListFunctions: React.FC = () => {
     setCommandHistory([])
   }
 
-  const handleAppend = (inputValue: string) => {
+  const handleAppend = (_indexValue?: number, inputValue?: string) => {
     const values = formatInput(inputValue)
     if (values.some(isNaN)) {
       alert('All values should be number')
@@ -58,7 +60,7 @@ export const ListFunctions: React.FC = () => {
     setHighlightedIndex(null)
   }
 
-  const handleExtend = (inputValue: string) => {
+  const handleExtend = (_indexValue?: number, inputValue?: string) => {
     const values = formatInput(inputValue)
     if (values.some(isNaN)) {
       alert('All values should be number')
@@ -83,7 +85,8 @@ export const ListFunctions: React.FC = () => {
     setHighlightedIndex(null)
   }
 
-  const handleInsert = (index: number, inputValue: string) => {
+  const handleInsert = (index?: number, inputValue?: string) => {
+    if (index === undefined) return
     const values = formatInput(inputValue)
     if (values.some(isNaN)) {
       alert('All values should be numbers')
@@ -111,7 +114,7 @@ export const ListFunctions: React.FC = () => {
     setHighlightedIndex(null)
   }
 
-  const handleIndex = (inputValue: string) => {
+  const handleIndex = (_indexValue?: number, inputValue?: string) => {
     const values = formatInput(inputValue)
     if (values.some(isNaN)) {
       alert('All values should be numbers')
@@ -138,7 +141,7 @@ export const ListFunctions: React.FC = () => {
     }, 2500)
   }
 
-  const handleCount = (inputValue: string) => {
+  const handleCount = (_indexValue?: number, inputValue?: string) => {
     const values = formatInput(inputValue)
     if (values.some(isNaN)) {
       alert('All values should be numbers')
@@ -162,7 +165,7 @@ export const ListFunctions: React.FC = () => {
     alert(count)
   }
 
-  const handleRemove = (inputValue: string) => {
+  const handleRemove = (_indexValue?: number, inputValue?: string) => {
     const values = formatInput(inputValue)
     if (values.some(isNaN)) {
       alert('All values should be numbers')
@@ -222,7 +225,10 @@ export const ListFunctions: React.FC = () => {
   }
 
   const handleClear = () => {
-    setList(() => [])
+    setList(() => {
+      refList.current = []
+      return []
+    })
     setCommandHistory((history) => [...history, `my_list.clear() # []`])
   }
 
@@ -294,28 +300,63 @@ export const ListFunctions: React.FC = () => {
     ])
   }
 
+  const inputLabels = {
+    append: { text: 'Append', bgColor: 'bg-blue-500', textColor: 'text-white' },
+    extend: { text: 'Extend', bgColor: 'bg-blue-500', textColor: 'text-white' },
+    insert: { text: 'Insert', bgColor: 'bg-blue-500', textColor: 'text-white' },
+    remove: { text: 'Remove', bgColor: 'bg-blue-500', textColor: 'text-white' },
+    index: { text: 'Index', bgColor: 'bg-blue-500', textColor: 'text-white' },
+    count: { text: 'Count', bgColor: 'bg-blue-500', textColor: 'text-white' },
+  }
+
+  const buttonLabels = {
+    onPop: { text: 'Pop', bgColor: 'bg-red-500', textColor: 'text-white' },
+    onClear: {
+      text: 'Clear',
+      bgColor: 'bg-orange-500',
+      textColor: 'text-white',
+    },
+    onReverse: {
+      text: 'Reverse',
+      bgColor: 'bg-purple-500',
+      textColor: 'text-white',
+    },
+  }
+
   return (
     <div className='bg-white p-6 rounded shadow-md'>
+      <h1 className='text-3xl font-bold text-center mb-6'>
+        Python List Functions Visualizer
+      </h1>
+
       <div className='grid grid-cols-2 gap-8 h-86'>
         <div className='grid grid-rows-2 gap-4'>
           <div className='border-2 border-black border-dashed px-4 py-4 rounded-md'>
             <InputForm
-              onAppend={handleAppend}
-              onExtend={handleExtend}
-              onInsert={handleInsert}
-              onRemove={handleRemove}
-              onIndex={handleIndex}
-              onCount={handleCount}
+              operations={{
+                append: handleAppend,
+                extend: handleExtend,
+                insert: handleInsert,
+                remove: handleRemove,
+                index: handleIndex,
+                count: handleCount,
+              }}
+              labels={inputLabels}
             />
           </div>
 
           <div className='border-2 border-black border-dashed px-4 py-4 rounded-md'>
             <ActionButtons
-              onPop={handlePop}
-              onClear={handleClear}
-              onSortAscending={handleSortAscending}
-              onSortDescending={handleSortDescending}
-              onReverse={handleReverse}
+              actions={{
+                onPop: handlePop,
+                onClear: handleClear,
+                onReverse: handleReverse,
+              }}
+              labels={buttonLabels}
+              sortActions={{
+                onSortAscending: handleSortAscending,
+                onSortDescending: handleSortDescending,
+              }}
             />
           </div>
         </div>
